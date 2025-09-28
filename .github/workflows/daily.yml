@@ -1,0 +1,34 @@
+name: Run daily Colab notebook
+
+on:
+  schedule:
+    # Runs every day at 01:00 UTC (09:00 Singapore time)
+    - cron: "0 1 * * *"
+  workflow_dispatch: {}  # lets you run it manually
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install runner deps
+        run: |
+          pip install --upgrade pip
+          pip install papermill nbformat nbconvert
+
+      - name: Execute notebook with papermill
+        run: |
+          papermill daily.ipynb output.ipynb
+
+      - name: Upload executed notebook as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: output-notebook
+          path: output.ipynb
