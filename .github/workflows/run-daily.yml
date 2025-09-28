@@ -26,7 +26,7 @@ jobs:
 
       - name: Execute notebook
         run: |
-          papermill "Daily_run_1.ipynb" "output.ipynb"
+          papermill "Nifty_200_Analysis.ipynb" "output.ipynb"
 
       - name: Upload executed notebook
         uses: actions/upload-artifact@v4
